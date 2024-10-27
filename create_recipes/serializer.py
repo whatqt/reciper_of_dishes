@@ -7,7 +7,7 @@ from rest_framework import serializers
 class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        exclude = ['id', 'created_at']
+        exclude = ['created_at']
         # fields = ['title', 'ingredients', 'instructions', 'created_by']
         
     # def validate_title(self, value):
