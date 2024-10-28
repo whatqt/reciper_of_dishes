@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'create_recipes',
     'my_recipes',
+    'update_recipes',
 
 
 ]
