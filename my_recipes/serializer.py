@@ -6,5 +6,5 @@ from create_recipes.models import Recipe
 class GetRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        exclude = ['created_by']
+        exclude = ['created_by', 'id']
         

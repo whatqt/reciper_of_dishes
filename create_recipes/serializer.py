@@ -7,16 +7,16 @@ from rest_framework import serializers
 class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        exclude = ['created_at']
+        exclude = ['created_at', 'id']
         
     def validate_categories(self, value):
         categories = [
-            "Закуски",
-            "Первые блюда",
-            "Вторые блюда",
-            "Салаты",
-            "Десерты",
-            "Напитки"
+            "закуски",
+            "первые блюда",
+            "вторые блюда",
+            "салаты",
+            "десерты",
+            "напитки"
         ]
         
         print(value)
@@ -24,7 +24,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         if len_value != 0:
             for number_recipe in range(len(value)):
                 print(value[number_recipe])
-                if value[number_recipe] not in categories:
+                if value[number_recipe].lower() not in categories:
                     raise serializers.ValidationError(f"The {value[number_recipe]} category does not exist")
                 else: return value
         else: raise serializers.ValidationError("no categories selected")

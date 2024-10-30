@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class Recipe(models.Model):
-    title = models.CharField(primary_key=True, max_length=200, db_index=True)
+    title = models.CharField(max_length=200, db_index=True)
     ingredients = models.TextField()
     instructions = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)

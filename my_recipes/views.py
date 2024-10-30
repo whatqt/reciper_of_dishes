@@ -20,7 +20,7 @@ class MyRecipes(APIView):
         data_recipe = self.get_queryset(title)
         if data_recipe:
             serializer = GetRecipeSerializer(
-                {
+                data={
                     "title": data_recipe.title,
                     "ingredients": data_recipe.ingredients,
                     "instructions": data_recipe.instructions,
@@ -29,8 +29,12 @@ class MyRecipes(APIView):
                     "categories": data_recipe.categories
                 }
             )
-            return Response({"data_recipe": serializer.data})
-        else: return Response({"data_recipe": "None"})
+            print(serializer.is_valid())
+            if serializer.is_valid():
+                return Response({"data_recipe": serializer.data}) 
+            
+        return Response({"data_recipe": data_recipe})
+       
 
 
 # сделать еще фильтрацию, а именно поиск по рейтингу, по дате создания, по названию (в афлавитном порядке)
