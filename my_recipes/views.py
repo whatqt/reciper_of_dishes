@@ -25,7 +25,12 @@ class MyRecipes(APIView):
                     "ingredients": data_recipe.ingredients,
                     "instructions": data_recipe.instructions,
                     "created_at": data_recipe.created_at,
+                    "start": data_recipe.starts,
+                    "categories": data_recipe.categories
                 }
             )
             return Response({"data_recipe": serializer.data})
         else: return Response({"data_recipe": "None"})
+
+
+# сделать еще фильтрацию, а именно поиск по рейтингу, по дате создания, по названию (в афлавитном порядке)
