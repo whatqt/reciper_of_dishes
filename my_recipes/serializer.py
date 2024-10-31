@@ -8,3 +8,8 @@ class GetRecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         exclude = ['created_by', 'id']
         
+class GetRecipesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['title']
+        
