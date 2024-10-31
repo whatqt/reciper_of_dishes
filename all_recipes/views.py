@@ -16,12 +16,15 @@ class AllRecipes(APIView):
 
     def get(self, request: Request):
         data_recipes = self.get_queryset()
-        # print(data_recipes)
-        ready_recipes = []
+        page_number = request.query_params.get('page_number', 1)
+        len_data_recipes = len(data_recipes)
+        validated_recipes = []
+        dict_recipes = {}
+        quantity_add_recipe = 0
+        select_page = 1
         for data_recipe in data_recipes:
             dict_data_recipe = dict(data_recipe)
-            del dict_data_recipe["id"]
-            del dict_data_recipe['created_by_id']
+            del dict_data_recipe["id"], dict_data_recipe['created_by_id']
             dict_data_recipe['created_by'] = request.user.pk
             # print(dict_data_recipe)
             serializer = AllViewRecipeSerializer(data=dict_data_recipe)
@@ -29,7 +32,26 @@ class AllRecipes(APIView):
             if serializer.is_valid():
                 serializer.validated_data['created_by'] = request.user.username
                 print(serializer.validated_data)
-                ready_recipes.append(serializer.validated_data)
-            else: return Response(serializer.errors)
-        return Response({"recipes": ready_recipes})
+                validated_recipes.append(serializer.validated_data)
+                quantity_add_recipe+=1
+                match quantity_add_recipe:
+                    case 5:
+                        print("5 записей")
+                        dict_recipes[select_page] = validated_recipes.copy()
+                        select_page +=1
+                        validated_recipes.clear()
+                        quantity_add_recipe = 0
 
+            else: return Response(serializer.errors)
+
+
+        if quantity_add_recipe != 0:
+            dict_recipes[select_page] = validated_recipes.copy()
+        
+        if len_data_recipes < 5:
+            print(dict_recipes)
+            return Response({"recipes": validated_recipes})
+        else: return Response({"recipes": dict_recipes[int(page_number)]})
+
+# доработать, поскольку выбор следующей страницы всё равно будет грузить лишнее данные.
+# изначальная задумка в том, что все данные подгружаются тогда, когда пользователь переходить на новую странциу.
