@@ -5,4 +5,4 @@ from create_recipes.models import Recipe
 class SearchRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['title']
+        fields = ['title', 'ingredients', 'created_by']
