@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'update_recipes',
     'delete_recipe',
     'all_recipes',
+    'search_recipe',
 
 
 ]
