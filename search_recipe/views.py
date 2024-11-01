@@ -25,16 +25,19 @@ class SearchRecipeForTitle(APIView):
             data_recipes = recipes.values('title', 'ingredients', 'created_by')
             print(data_recipes)
             for recipe in data_recipes:
-                recipe['created_by'] = User.objects.get(id=recipe['created_by']).pk
+                user = User.objects.get(id=recipe['created_by'])
+                recipe['created_by'] = user.pk
                 print(recipe)
                 serializer = SearchRecipeSerializer(data=dict(recipe))
                 print(serializer.is_valid())
                 if serializer.is_valid():
                     print(serializer.validated_data)
-                    serializer.validated_data['created_by'] = User.objects.get(id=recipe['created_by']).username
+                    serializer.validated_data['created_by'] = user.username
                     validated_recipes.append(serializer.validated_data)
                 else: return Response(serializer.errors)
             return Response({"result_search": validated_recipes})
+        else: return Response({"result_search": None})
+
 # посмотреть как правильно реализовывать такие системы и что делать с username
 
 

@@ -24,13 +24,14 @@ class AllRecipes(APIView):
         select_page = 1
         for data_recipe in data_recipes:
             dict_data_recipe = dict(data_recipe)
-            del dict_data_recipe["id"], dict_data_recipe['created_by_id']
-            dict_data_recipe['created_by'] = request.user.pk
+            del dict_data_recipe["id"]
+            user = User.objects.get(id=dict_data_recipe['created_by_id'])
+            dict_data_recipe['created_by'] = user.pk
             # print(dict_data_recipe)
             serializer = AllViewRecipeSerializer(data=dict_data_recipe)
             print(serializer.is_valid())
             if serializer.is_valid():
-                serializer.validated_data['created_by'] = request.user.username
+                serializer.validated_data['created_by'] = user.username
                 print(serializer.validated_data)
                 validated_recipes.append(serializer.validated_data)
                 quantity_add_recipe+=1
