@@ -11,7 +11,7 @@ class Recipe(models.Model):
     instructions = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    starts = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    stars = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
     categories = ArrayField(models.CharField(max_length=61), size=6)
     # добавить судуа поле, где будет показан общий рейтинг, который будет вычитываться по формуле
 
