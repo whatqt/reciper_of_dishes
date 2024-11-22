@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory
 from json import dumps
-from .views import CrateRecipe
+from .views import Recipe
 
 
 
@@ -27,7 +27,7 @@ class TestCreateRecipes(TestCase):
             content_type='application/json'
         )
         request.user = self.user
-        view = CrateRecipe.as_view()
+        view = Recipe.as_view()
         response = view(request)
         self.assertEqual(response.status_code, 201)
 
