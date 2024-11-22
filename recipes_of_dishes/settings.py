@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i6spuqsv4-kz_&w+_(kk5!ru%4+!v*q6d6iq7ge$r$&w4z%@f1'
+SECRET_KEY = getenv("RECIPES_OF_DISHES")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'all_recipes',
     'search_recipe',
     'put_stars',
-
 
 ]
 

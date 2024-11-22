@@ -5,7 +5,7 @@ from my_recipes.views import MyRecipe, MyRecipes
 from update_recipes.views import UpdateMyRecipe
 from delete_recipe.views import DeleteRecipe
 from all_recipes.views import AllRecipes
-from search_recipe.views import SearchRecipeForTitle
+from search_recipe.views import SearchRecipeForTitle, ResultSearchRecipeForTitle
 from put_stars.views import PutStars
 
 
@@ -16,6 +16,7 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path("create_recipe/", CrateRecipe.as_view()),
     path("search_recipe/", SearchRecipeForTitle.as_view()),
+    path("search_recipe_result/", ResultSearchRecipeForTitle.as_view()),
     path("put_stars/", PutStars.as_view()),
     path("recipes/", AllRecipes.as_view()),
     path("delete_recipe/<title>", DeleteRecipe.as_view()),
