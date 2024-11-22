@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'create_recipes',
+    'recipes',
     'my_recipes',
     'update_recipes',
     'delete_recipe',
