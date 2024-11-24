@@ -6,16 +6,15 @@ from .logic_stars import RecipeStars
 class PutStarsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['title', 'stars', 'created_by']
+        fields = ['id', 'stars']
 
-    def update(self, recipe, data_recipe, validated_data):
-        current_rating = int(data_recipe.stars)
-        print(data_recipe.stars)
+    def update(self, recipe, validated_data):
+        recipe_data = recipe.get()
+        current_rating = int(recipe_data.stars)
+        print(recipe_data.stars)
         if current_rating == 0.0:
-            current_rating = []
+            current_rating = float(validated_data["stars"])
         rating_update = RecipeStars([current_rating])
-        print(validated_data["stars"])
-        print(type(validated_data["stars"]))
         rating_update.add_stars(float(validated_data["stars"]))
         change_stars = rating_update.calculate_average_stars()
         recipe.update(stars=change_stars)

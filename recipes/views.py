@@ -9,12 +9,14 @@ import json
 
 
 class Recipe(APIView):
-    @add_created_by_get
+    # @add_created_by_get
     def get(self, request: Request, id_recipe: int):
         get_recipe = GetRecipe(id_recipe)
-        recipe = get_recipe.get()
+        recipe = get_recipe.recipe_get()
         if recipe:
-            recipe.update(request.data)
+            recipe = recipe.values()[0]
+            created_by = recipe["created_by_id"]
+            recipe["created_by"] = created_by
             serializer = GetRecipeSerializer(data=recipe)
             if serializer.is_valid():
                 return Response(

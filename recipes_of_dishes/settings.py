@@ -42,9 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'recipes',
     'my_recipes',
-    'update_recipes',
-    'delete_recipe',
-    'all_recipes',
     'search_recipe',
     'put_stars',
 

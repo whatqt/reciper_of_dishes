@@ -1,6 +1,5 @@
 from .models import Recipe
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
 
 
 
@@ -20,13 +19,16 @@ class GetRecipe:
     def __init__(self, id_recipe):
         self.id_recipe = id_recipe
 
-    def get(self):
+    # найти как решить дилему:
+    # какое лучше дать название или сделать два метода:
+    # один метод возращает сам объект, а второй возращает объекты/dict
+    def recipe_get(self):
         try:
             recipe = Recipe.objects.filter(
                 id=self.id_recipe
-            ).values()[0]
+            )
             return recipe
-        except (ObjectDoesNotExist, IndexError): 
+        except ObjectDoesNotExist: 
             return None
 
 class RightsToDeleteOrPatch:
