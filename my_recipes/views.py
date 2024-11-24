@@ -4,7 +4,7 @@ from rest_framework.views import Response
 from rest_framework.views import APIView, Request
 from .serializer import GetRecipeSerializer, GetRecipesSerializer
 from django.contrib.auth.models import User
-from create_recipes.models import Recipe
+from recipes.models import Recipe
 from django.core.exceptions import ObjectDoesNotExist
 
 

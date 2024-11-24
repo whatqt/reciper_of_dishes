@@ -4,7 +4,7 @@ from rest_framework.views import Response
 from rest_framework.views import APIView, Request
 from .serializer import AllViewRecipeSerializer
 from django.contrib.auth.models import User
-from create_recipes.models import Recipe
+from recipes.models import Recipe
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
@@ -55,4 +55,4 @@ class AllRecipes(APIView):
         else: return Response({"recipes": dict_recipes[int(page_number)]})
 
 # доработать, поскольку выбор следующей страницы всё равно будет грузить лишнее данные.
-# изначальная задумка в том, что все данные подгружаются тогда, когда пользователь переходить на новую странциу.
+# изначальная задумка в том, что все данные подгружаются тогда, когда пользователь переходит на новую странциу.
