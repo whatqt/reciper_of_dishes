@@ -1,6 +1,6 @@
 from .models import Recipe
 from django.core.exceptions import ObjectDoesNotExist
-
+from my_recipes.service import IterationRecipes
 
 
 class ValidateType:
@@ -46,9 +46,19 @@ class RightsToDeleteOrPatchOrGet:
         except ObjectDoesNotExist:
             return None
 
-# class UpdateRecipe:
-#     def __init__(self, recipe):
-#         self.recipe = recipe
-    
-#     def recipe_update(self):
-#         pass
+class IterationRecipesAtId(IterationRecipes):
+    def iteration(self):
+        super().iteration()
+        validate_recipes = []
+        for recipe in self.recipes:
+            created_by = recipe["created_by_id"] 
+            del recipe["created_by_id"] 
+            recipe["created_by"] = created_by
+            serializer = self.class_serializer(
+                data=recipe
+            )
+            if serializer.is_valid() is False:
+                return False
+            else: validate_recipes.append(recipe)
+
+        return validate_recipes

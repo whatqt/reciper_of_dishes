@@ -13,7 +13,8 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     stars = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
     categories = ArrayField(models.CharField(max_length=61), size=6)
-    # добавить судуа поле, где будет показан общий рейтинг, который будет вычитываться по формуле
+
+
 
 # добавить суда модель где будут храниться коментарии и оценки, и просмотры(так же через ForeignKey) 
 # саму функцию добавление оценки сделать в webapp view_recipes 

@@ -2,21 +2,15 @@ from rest_framework import status
 from django.shortcuts import redirect
 from rest_framework.views import Response
 from rest_framework.views import APIView, Request
-from .serializer import GetRecipeSerializer, GetRecipesSerializer
+from .serializer import GetRecipeSerializer
 from django.contrib.auth.models import User
 from recipes.models import Recipe
 from django.core.exceptions import ObjectDoesNotExist
 from recipes.service import RightsToDeleteOrPatchOrGet
-from .service import GetMyRecipes
+from .service import GetMyRecipes, IterationRecipes
 
 
 class MyRecipe(APIView):
-    # def get_queryset(self, title):
-    #     try:
-    #         return Recipe.objects.filter(created_by=self.request.user).get(title=title)
-    #     except ObjectDoesNotExist:
-    #         return None
-
     def get(self, request: Request, id_recipe = 0):
         if id_recipe != 0:
             rights_get = RightsToDeleteOrPatchOrGet(
@@ -51,21 +45,22 @@ class MyRecipe(APIView):
                 request.user.pk
             )
             recipes = recipes.get_recipes()
-            print(recipes)
-            validate_recipes = []
-            for recipe in recipes:
-                serializer = GetRecipeSerializer(
-                    data=recipe
+            iteration_recipes = IterationRecipes(
+                recipes,
+                GetRecipeSerializer
+            )
+            recipes = iteration_recipes.iteration()
+            if recipes:
+                return Response(
+                    {"recipes": recipes},
+                    status.HTTP_302_FOUND
                 )
-                print(serializer.is_valid())
-                if serializer.is_valid() is False:
-                    return Response(
-                        {"Error": "500 Internal Server Error"},
-                        status.HTTP_500_INTERNAL_SERVER_ERROR
-                    )
-                else: validate_recipes.append(recipe)
+            return Response(
+                {"Error": "500 Internal Server Error"},
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
             
-            return Response({"recipes": validate_recipes})
             
 
        

@@ -3,34 +3,57 @@ from rest_framework.views import Response
 from rest_framework.views import APIView, Request
 from .serializer import CreateRecipeSerializer, \
     GetRecipeSerializer, PatchRecipeSerializer
-from recipes_of_dishes.decorators import add_created_by_post, add_created_by_get
-from .service import GetRecipe, RightsToDeleteOrPatchOrGet
-import json
+from .models import Recipe
+from recipes_of_dishes.decorators import add_created_by_post
+from .service import GetRecipe, RightsToDeleteOrPatchOrGet, \
+    IterationRecipesAtId
 
 
-class Recipe(APIView):
-    # @add_created_by_get
-    def get(self, request: Request, id_recipe: int):
-        get_recipe = GetRecipe(id_recipe)
-        recipe = get_recipe.recipe_get()
-        if recipe:
-            recipe = recipe.values()[0]
-            created_by = recipe["created_by_id"]
-            recipe["created_by"] = created_by
-            serializer = GetRecipeSerializer(data=recipe)
-            if serializer.is_valid():
+
+class Recipes(APIView):
+    def get_queryset(self):
+        recipes = Recipe.objects.all().values()
+        return recipes
+    
+    def get(self, request: Request, id_recipe: int = 0):
+        if id_recipe != 0:
+            get_recipe = GetRecipe(id_recipe)
+            recipe = get_recipe.recipe_get()
+            if recipe:
+                recipe = recipe.values()[0]
+                created_by = recipe["created_by_id"]
+                recipe["created_by"] = created_by
+                serializer = GetRecipeSerializer(data=recipe)
+                if serializer.is_valid():
+                    return Response(
+                        serializer.data, 
+                        status.HTTP_302_FOUND
+                    )
                 return Response(
-                    serializer.data, 
-                    status.HTTP_302_FOUND
+                    serializer.errors,    
+                    status.HTTP_400_BAD_REQUEST
                 )
             return Response(
-                serializer.errors,    
-                status.HTTP_400_BAD_REQUEST
+                {"Error": "Not Found"},
+                status.HTTP_404_NOT_FOUND
             )
-        return Response(
-            {"Error": "Not Found"},
-            status.HTTP_404_NOT_FOUND
-        )
+        elif id_recipe == 0:
+            recipes = self.get_queryset()
+            iteration_recipes = IterationRecipesAtId(
+                recipes,
+                GetRecipeSerializer
+            )
+            recipes = iteration_recipes.iteration()
+            if recipes:
+                return Response(
+                    {"recipes": recipes},
+                    status.HTTP_302_FOUND
+                )
+            
+            return Response(
+                {"Error": "500 Internal Server Error"},
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     @add_created_by_post
     def post(self, request: Request):
