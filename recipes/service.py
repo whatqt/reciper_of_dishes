@@ -31,7 +31,7 @@ class GetRecipe:
         except ObjectDoesNotExist: 
             return None
 
-class RightsToDeleteOrPatch:
+class RightsToDeleteOrPatchOrGet:
     def __init__(self, id_recipe, id_user):
         self.id_recipe = id_recipe
         self.id_user = id_user

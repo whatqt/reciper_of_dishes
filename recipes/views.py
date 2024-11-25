@@ -4,7 +4,7 @@ from rest_framework.views import APIView, Request
 from .serializer import CreateRecipeSerializer, \
     GetRecipeSerializer, PatchRecipeSerializer
 from recipes_of_dishes.decorators import add_created_by_post, add_created_by_get
-from .service import GetRecipe, RightsToDeleteOrPatch
+from .service import GetRecipe, RightsToDeleteOrPatchOrGet
 import json
 
 
@@ -47,7 +47,7 @@ class Recipe(APIView):
         )
     
     def delete(self, request: Request, id_recipe: int):
-        rights_to_delete = RightsToDeleteOrPatch(
+        rights_to_delete = RightsToDeleteOrPatchOrGet(
             id_recipe, 
             request.user.pk
         )
@@ -64,7 +64,7 @@ class Recipe(APIView):
         )
 
     def patch(self, request: Request, id_recipe: int):
-        rights_to_update = RightsToDeleteOrPatch(
+        rights_to_update = RightsToDeleteOrPatchOrGet(
             id_recipe,
             request.user.pk
         )
@@ -78,8 +78,12 @@ class Recipe(APIView):
                     request.user.pk,
                     id_recipe
                 )
-                return Response({"recipe": "update"})
-            return Response(serializer.errors)
+                return Response(
+                    {"recipe": "update"}
+                )
+            return Response(
+                serializer.errors
+            )
         return Response(
             {"Error": "Not Found"},
             status.HTTP_403_FORBIDDEN
