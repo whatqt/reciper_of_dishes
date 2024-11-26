@@ -103,10 +103,12 @@ class Recipes(APIView):
                     id_recipe
                 )
                 return Response(
-                    {"recipe": "update"}
+                    {"recipe": "update"},
+                    status.HTTP_202_ACCEPTED
                 )
             return Response(
-                serializer.errors
+                serializer.errors,
+                status.HTTP_400_BAD_REQUEST
             )
         return Response(
             {"Error": "Not Found"},
