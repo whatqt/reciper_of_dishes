@@ -16,7 +16,6 @@ class PutStars(APIView):
         if serializer.is_valid():
             recipe = GetRecipe(request.data["id"]).recipe_filter()
             if recipe:
-                # recipe = recipe.recipe_filter()
                 serializer.update(recipe, serializer.validated_data) 
                 return Response(
                     {"Recipe": "The rating has been updated"}, 

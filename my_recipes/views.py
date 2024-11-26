@@ -30,7 +30,6 @@ class MyRecipe(APIView):
                         "categories": data_recipe.categories
                     }
                 )
-                print(serializer.is_valid())
                 if serializer.is_valid():
                     return Response(
                         {"data_recipe": serializer.data},
