@@ -10,15 +10,16 @@ from recipes.service import RightsToDeleteOrPatchOrGet
 from .service import GetMyRecipes, IterationRecipes
 
 
+
 class MyRecipe(APIView):
     def get(self, request: Request, id_recipe = 0):
         if id_recipe != 0:
             rights_get = RightsToDeleteOrPatchOrGet(
                 id_recipe,
                 request.user.pk
-            ).chek()
-            if rights_get:
-                data_recipe = rights_get
+            )
+            if rights_get.chek():
+                data_recipe = rights_get.recipe_get()
                 serializer = GetRecipeSerializer(
                     data={
                         "title": data_recipe.title,
@@ -35,16 +36,25 @@ class MyRecipe(APIView):
                         {"data_recipe": serializer.data},
                         status.HTTP_302_FOUND 
                     ) 
-                
+                return Response(
+                    {"Error": "500 Internal Server Error"},
+                    status.HTTP_500_INTERNAL_SERVER_ERROR
+                )    
             return Response(
                 {"data_recipe": rights_get},
                 status.HTTP_404_NOT_FOUND
             )
+
         elif id_recipe == 0: 
             recipes = GetMyRecipes(
                 request.user.pk
             )
             recipes = recipes.get_recipes()
+            if recipes is None:
+                return Response(
+                    {"Error": "404 Not Found"},
+                    status.HTTP_404_NOT_FOUND
+                )
             iteration_recipes = IterationRecipes(
                 recipes,
                 GetRecipeSerializer
