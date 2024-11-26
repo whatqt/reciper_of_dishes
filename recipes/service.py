@@ -19,9 +19,6 @@ class GetRecipe:
     def __init__(self, id_recipe):
         self.id_recipe = id_recipe
 
-    # найти как решить дилему:
-    # какое лучше дать название или сделать два метода:
-    # один метод возращает сам объект, а второй возращает объекты/dict
     def recipe_filter(self):
         try:
             recipe = Recipe.objects.filter(
@@ -40,7 +37,7 @@ class GetRecipe:
             return None
 
 
-
+# RightsToDeleteOrPatchOrGet - разделить на 4 класса
 class RightsToDeleteOrPatchOrGet:
     def __init__(self, id_recipe, id_user):
         self.id_recipe = id_recipe
@@ -51,10 +48,16 @@ class RightsToDeleteOrPatchOrGet:
             chek_rights = Recipe.objects.filter(
                 created_by_id=self.id_user,
                 id=self.id_recipe
-            ).get()
+            )
             return chek_rights
         except ObjectDoesNotExist:
             return None
+        
+    def recipe_get(self):
+        check_recipe = self.chek()
+        if check_recipe:
+            return check_recipe.get()
+        else: return None
 
 class IterationRecipesAtId(IterationRecipes):
     def iteration(self):
