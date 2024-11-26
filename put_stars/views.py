@@ -14,9 +14,9 @@ class PutStars(APIView):
     def patch(self, request: Request):
         serializer = PutStarsSerializer(data=request.data)
         if serializer.is_valid():
-            recipe = GetRecipe(request.data["id"])
+            recipe = GetRecipe(request.data["id"]).recipe_filter()
             if recipe:
-                recipe = recipe.recipe_get()
+                # recipe = recipe.recipe_filter()
                 serializer.update(recipe, serializer.validated_data) 
                 return Response(
                     {"Recipe": "The rating has been updated"}, 
@@ -32,4 +32,4 @@ class PutStars(APIView):
         )
 
 
-#{"title": "test", "stars": 5.0, "created_by": 2}
+#{"id":36, "stars": 5.0}
