@@ -22,7 +22,7 @@ class GetRecipe:
     # найти как решить дилему:
     # какое лучше дать название или сделать два метода:
     # один метод возращает сам объект, а второй возращает объекты/dict
-    def recipe_get(self):
+    def recipe_filter(self):
         try:
             recipe = Recipe.objects.filter(
                 id=self.id_recipe
@@ -30,6 +30,16 @@ class GetRecipe:
             return recipe
         except ObjectDoesNotExist: 
             return None
+    
+    def recipe_values(self):
+        recipe = self.recipe_filter()
+        if recipe:
+            recipe_values = recipe.values()[0]
+            return recipe_values
+        else: 
+            return None
+
+
 
 class RightsToDeleteOrPatchOrGet:
     def __init__(self, id_recipe, id_user):

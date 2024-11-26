@@ -18,9 +18,9 @@ class Recipes(APIView):
     def get(self, request: Request, id_recipe: int = 0):
         if id_recipe != 0:
             get_recipe = GetRecipe(id_recipe)
-            recipe = get_recipe.recipe_get()
+            recipe = get_recipe.recipe_filter()
             if recipe:
-                recipe = recipe.values()[0]
+                recipe = get_recipe.recipe_values()
                 created_by = recipe["created_by_id"]
                 recipe["created_by"] = created_by
                 serializer = GetRecipeSerializer(data=recipe)
@@ -37,6 +37,7 @@ class Recipes(APIView):
                 {"Error": "Not Found"},
                 status.HTTP_404_NOT_FOUND
             )
+        
         elif id_recipe == 0:
             recipes = self.get_queryset()
             iteration_recipes = IterationRecipesAtId(
